@@ -4,3 +4,5 @@ package-lock.json
 .idea/*
 nohup.out
 npm-debug.log
+.env
+.env.test
