@@ -1,0 +1,26 @@
+{
+  "name": "discordtest",
+  "version": "1.0.0",
+  "description": "discord bot development testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/longhorn09/discordtest.git"
+  },
+  "author": "Norman Tang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/longhorn09/discordtest/issues"
+  },
+  "homepage": "https://github.com/longhorn09/discordtest#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "discord.js": "^14.7.1",
+    "eslint": "^8.32.0",
+    "moment": "^2.29.4",
+    "mysql": "^2.18.1"
+  }
+}
