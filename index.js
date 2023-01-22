@@ -1,4 +1,8 @@
-// https://www.youtube.com/watch?v=qRMVNtIF73c
+/** 
+ * boiler plate: https://www.youtube.com/watch?v=qRMVNtIF73c
+ * registering global slashcommand: https://www.youtube.com/watch?v=ZtDtjjUHbIg&t=492s
+ */ 
+
 
 //const { Client, Events, GatewayIntentBits } = require('discord.js')
 const fs = require('node:fs');
