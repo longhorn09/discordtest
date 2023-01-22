@@ -17,7 +17,12 @@ module.exports = {
 	async execute(interaction) {
 		// interaction.user is the object representing the User who ran the command
 		// interaction.member is the GuildMember object, which represents the user in the specific guild
-		await interaction.reply({content: interaction.options.getString('item'), ephemeral: true});
+		await interaction.reply({ content: "`1 item found for '" + interaction.options.getString('item') + "'`"
+								, epheremal: true
+							    });
+		await interaction.followUp({content: "```" + interaction.options.getString('item') + "```"
+								  , ephemeral: true
+								   });
 		//USER:   await interaction.reply(`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`);
 		//SERVER: await interaction.reply(`This server is ${interaction.guild.name} and has ${interaction.guild.memberCount} members.`);		
 	},
