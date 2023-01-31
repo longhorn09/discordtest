@@ -15,10 +15,20 @@ module.exports = {
 				.setDescription('example: bronze.shield')
 				.setRequired(true)),
 	async execute(interaction) {
+		let loreURL = "http://127.0.0.1:8080/api/v1/stat/" + interaction.options.getString('item') + "/1"
 		// interaction.user is the object representing the User who ran the command
 		// interaction.member is the GuildMember object, which represents the user in the specific guild
-		await fetch("http://127.0.0.1:8080/api/v1/stat/" + interaction.options.getString('item') + "/1")
-		console.log("http://127.0.0.1:8080/api/v1/stat/" + interaction.options.getString('item') + "/1")
+		await fetch(loreURL, {method: 'GET'}).then(
+			res => {
+				if (res.ok) {  // note: response object contains entire HTTP response including headers
+					return res.json()
+				} else {
+					console.log("error")
+				}
+			})
+			.then(data => console.log(data))
+		
+		console.log('loreURL: ' + loreURL)
 		await interaction.reply({ content: "`1 item found for '" + interaction.options.getString('item') + "'`"
 								, epheremal: true
 							    });

@@ -45,8 +45,7 @@ client.on('messageCreate', (message) => {
    // message.reply({content: "direct DM detected", ephmeral: true});
   }
 
-  /*
-  if (message.content === 'ping') {
+  /*if (message.content === 'ping') {
     message.reply('reply pong')
     message.channel.send("channel pong")
     message.author.send("direct pong")
@@ -64,8 +63,9 @@ client.on('messageCreate', (message) => {
         break;
       case "stat":
         if (message.content.toString().match(/^!stat\s+(.+)$/)) {
-          message.reply({ content: "Use `/stat " + /^!stat\s+(.+)$/.exec(message.content.toString())[1] + "` instead, `!stat` is deprecated", ephmeral: true});
-        }
+//          message.reply({ content: "Use `/stat " + /^!stat\s+(.+)$/.exec(message.content.toString())[1] + "` instead, `!stat` is deprecated", ephmeral: true});
+            message.reply({ content: "`!stat` is deprecated. Use ```/stat " + /^!stat\s+(.+)$/.exec(message.content.toString())[1] + "```", ephmeral: true});
+       }
         else {
           message.reply({ content: "Use `/stat` instead, `!stat` is deprecated", ephmeral: true});
         }
@@ -74,7 +74,8 @@ client.on('messageCreate', (message) => {
     }
   }
   else if (message.content.trim().indexOf("Object '") >= 0   //need to do this way because lore might be pasted in middle of conversation
-        && message.author.username.substring(0,botname.length).toLowerCase() !== botname)
+       // && message.author.username.substring(0,botname.length).toLowerCase() !== botname)
+        && message.author.id != process.env.DISCORD_OWNERID)
   {
     let loreArr = null, cleanArr = [];
     //need to scrub the lore message for processing
@@ -95,7 +96,8 @@ client.on('messageCreate', (message) => {
     cleanArr = null;  //freeup for gc()
   }
   else if (message.content.trim().indexOf(" is using:") >0
-        && message.author.username.substring(0,botname.length).toLowerCase() !== botname)
+      //  && message.author.username.substring(0,botname.length).toLowerCase() !== botname)
+          && message.author.id != process.env.DISCORD_OWNERID)
   {
     let lookArr = null, cleanArr = [], charName = null;
     lookArr = message.content.trim().split(/([A-Z][a-z]+) is using:/);
