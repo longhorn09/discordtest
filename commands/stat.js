@@ -17,6 +17,8 @@ module.exports = {
 	async execute(interaction) {
 		// interaction.user is the object representing the User who ran the command
 		// interaction.member is the GuildMember object, which represents the user in the specific guild
+		await fetch("http://127.0.0.1:8080/api/v1/stat/" + interaction.options.getString('item') + "/1")
+		console.log("http://127.0.0.1:8080/api/v1/stat/" + interaction.options.getString('item') + "/1")
 		await interaction.reply({ content: "`1 item found for '" + interaction.options.getString('item') + "'`"
 								, epheremal: true
 							    });

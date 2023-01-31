@@ -7,7 +7,7 @@
 //const { Client, Events, GatewayIntentBits } = require('discord.js')
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits } = require('discord.js')
+const { Client, Collection, Events, GatewayIntentBits, Partials } = require('discord.js') // need Partials for bot to respond to DMs
 require('dotenv/config')
 
 const client = new Client({
@@ -17,6 +17,10 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages
   ],
+  partials: [
+    Partials.Channel,
+    Partials.Message
+  ]
 })
 
 client.commands = new Collection();
@@ -29,30 +33,42 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-
 // in discordjs version 13+, replace "message" with "messageCreate"
 client.on('messageCreate', (message) => {
   let cmd = "";
   let parsedCmd = ""
+  let isDM = false
 
+//  if (!message.guild && message.author.username != process.env.BOT_NAME) {
+  if (!message.guild && message.author.id != process.env.DISCORD_OWNERID) {
+    isDM = true
+   // message.reply({content: "direct DM detected", ephmeral: true});
+  }
+
+  /*
   if (message.content === 'ping') {
     message.reply('reply pong')
     message.channel.send("channel pong")
     message.author.send("direct pong")
   
   }
-  
+  */
+
   if (message.content.startsWith(process.env.DISCORD_PREFIX)) {
     cmd = message.content.substring(1,message.content.length);
     parsedCmd = cmd.split(" ")[0];
 
     switch(parsedCmd) {
       case "help":
-        //let helpStr = message.author.send("Use `/help` instead, `!help` is deprecated",{code:true});
-        //await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-        //message.reply("Use `/help` instead, `!help` is deprecated", ephmeral: true)
         message.reply({ content: "Use `/help` instead, `!help` is deprecated", ephmeral: true});
         break;
+      case "stat":
+        if (message.content.toString().match(/^!stat\s+(.+)$/)) {
+          message.reply({ content: "Use `/stat " + /^!stat\s+(.+)$/.exec(message.content.toString())[1] + "` instead, `!stat` is deprecated", ephmeral: true});
+        }
+        else {
+          message.reply({ content: "Use `/stat` instead, `!stat` is deprecated", ephmeral: true});
+        }
       default: 
         break;
     }
