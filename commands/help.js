@@ -1,8 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
-
+// https://stackoverflow.com/questions/73157348/creating-slash-commands-without-options-discord-js-v14
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('help')
+	  .setDMPermission(true)
 		.setDescription('Shows the list of Lorebot commands'),
 	async execute(interaction) {
 		let helpMsg  = "** IRC Lore Bot v" + process.env.npm_package_version + ` **\n` + // (Items: ${numRows}) **\n` +

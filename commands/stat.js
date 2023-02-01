@@ -9,6 +9,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('stat')
 		.setDescription('Provides lore stats about object(s)')
+	  .setDMPermission(true)
 		.addStringOption(option =>
 			option
 				.setName('item')
@@ -26,9 +27,14 @@ module.exports = {
 					console.log("error")
 				}
 			})
-			.then(data => console.log(data))
+			.then(data => {
+				//console.log(data.jsonData)//[0])
+				for (let i = 0; i < 3; i++) {
+				console.log(data.data[i].OBJECT_NAME)	
+		  	}
+			})
 		
-		console.log('loreURL: ' + loreURL)
+		//#console.log('loreURL: ' + loreURL)
 		await interaction.reply({ content: "`1 item found for '" + interaction.options.getString('item') + "'`"
 								, epheremal: true
 							    });
