@@ -52,7 +52,7 @@ module.exports = {
 				  for (let i = 0; i < data.data.length; i++) {
 						embedMsg += "`Object`[`" + data.data[i].OBJECT_NAME.toString().trim() + "`](http://www.normstorm.com)\n"
 		  	  }
-					console.log(embedMsg)
+					//console.log(embedMsg)
            
 					embedObj.setTitle("" + titleMsg + "" )
 					embedObj.setDescription(embedMsg );
