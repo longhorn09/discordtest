@@ -6,16 +6,34 @@ const { SlashCommandBuilder } = require('discord.js');
  * 
  */
 function formatLore(pArg) {
-  let sb ='';
+  let retvalue ='';
+	let sb = ''
 
-	if (pArg != null) {
-		if (pArg.data.length > 0) {
-			for (let i = 0; i < Math.min(pArg.data.length,3); i++) {
-				sb = ''
-			}
-		}
-	}
-	return sb;
+	sb += `\nObject '${pArg.OBJECT_NAME}'\n`;
+
+  if (pArg.ITEM_TYPE != null) sb += `Item Type: ${pArg.ITEM_TYPE}\n`;
+  if (pArg.MAT_CLASS != null) sb += `Mat Class: ${(pArg.MAT_CLASS).padEnd(13)}Material : ${pArg.MATERIAL}\n`;
+  if (pArg.WEIGHT    != null) sb += `Weight   : ${(pArg.WEIGHT.toString()).padEnd(13)}Value    : ${pArg.ITEM_VALUE}\n`;
+  //if (pArg.AFFECTS   != null) sb += `${formatAffects(pArg.AFFECTS)}`;
+  if (pArg.SPEED     != null) sb += `Speed    : ${pArg.SPEED}\n`;
+  if (pArg.POWER     != null) sb += `Power    : ${pArg.POWER}\n`;
+  if (pArg.ACCURACY  != null) sb += `Accuracy : ${pArg.ACCURACY}\n`;
+  if (pArg.EFFECTS   != null) sb += `Effects  : ${pArg.EFFECTS}\n`;
+  if (pArg.ITEM_IS   != null) sb += `Item is  : ${pArg.ITEM_IS.toUpperCase()}\n`;
+  if (pArg.CHARGES   != null) sb += `Charges  : ${pArg.CHARGES}\n`;
+  if (pArg.ITEM_LEVEL!= null) sb += `Level    : ${pArg.ITEM_LEVEL}\n`;
+  if (pArg.RESTRICTS != null) sb += `Restricts: ${pArg.RESTRICTS.toUpperCase()}\n`;
+  if (pArg.IMMUNE    != null) sb += `Immune   : ${pArg.IMMUNE}\n`;
+  if (pArg.APPLY     != null) sb += `Apply    : ${pArg.APPLY}\n`;
+  if (pArg.CLASS     != null) sb += `Class    : ${pArg.CLASS}\n`;
+  if (pArg.DAMAGE    != null) sb +=        `Damage   : ${pArg.DAMAGE}\n`;
+  if (pArg.CONTAINER_SIZE   != null) sb += `Contains : ${pArg.CONTAINER_SIZE}\n`;
+  if (pArg.CAPACITY    != null) sb +=      `Capacity : ${pArg.CAPACITY}\n`;
+
+  if (pArg.SUBMITTER != null) sb += `Submitter: ${pArg.SUBMITTER} (${pArg.CREATE_DATE})\n`;
+
+	retvalue = sb;
+	return retvalue;
 }
 
 module.exports = {
@@ -42,20 +60,28 @@ module.exports = {
 			})
 			.then(data => {
 				//console.log(data.jsonData)//[0])
-				formatLore(data)
-				for (let i = 0; i < 3; i++) {
-				console.log(data.data[i].OBJECT_NAME)	
-		  	}
+				//formatLore(data)
+				let replyMsg = ''
+				if (data.data.length === 0) {
+				  replyMsg = "0 item(s) found for '" + interaction.options.getString('item') + "'"	
+				}
+				else {
+				  for (let i = 0; i < data.data.length; i++) {
+					  replyMsg += formatLore(data.data[i]);
+		  	  }
+	      }
+        interaction.reply({ content: "```" + replyMsg + "```" , epheremal: true});
 			})
 		
 		//#console.log('loreURL: ' + loreURL)
-		await interaction.reply({ content: "`1 item found for '" + interaction.options.getString('item') + "'`"
+		/*await interaction.reply({ content: "`1 item found for '" + interaction.options.getString('item') + "'`"
 								, epheremal: true
 							    });
+									*/
+		/*
 		await interaction.followUp({content: "```" + interaction.options.getString('item') + "```"
 								  , ephemeral: true
 								   });
-		//USER:   await interaction.reply(`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`);
-		//SERVER: await interaction.reply(`This server is ${interaction.guild.name} and has ${interaction.guild.memberCount} members.`);		
+	  */
 	},
 };
