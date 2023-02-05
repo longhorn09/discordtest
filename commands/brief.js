@@ -1,6 +1,8 @@
-const { SlashCommandBuilder } = require('discord.js');
+const {EmbedBuilder,  SlashCommandBuilder } = require('discord.js');
+
 var moment = require('moment');
 
+const embedObj = new EmbedBuilder()
 /**
  * handles /brief
  */
@@ -16,10 +18,11 @@ module.exports = {
 				.setRequired(true)),
 	async execute(interaction) {
     let dateTime = ''
-		let replyMsg =''
+		let titleMsg = '', 
+			  embedMsg = '';
 		let loreURL = "http://" + process.env.DATABASE_IP + "/api/v1/brief/" + interaction.options.getString('item') 
 
-		console.log(loreURL)
+		//console.log(loreURL)
 
 		await fetch(loreURL, {method: 'GET'}).then(
 			res => {
@@ -31,22 +34,34 @@ module.exports = {
 			})
 			.then(data => {
 				if (data.data.length === 0) {
-				  replyMsg = "0 item(s) found for '" + interaction.options.getString('item') + "'\n"	
+				  titleMsg = "0 item(s) found for '`" + interaction.options.getString('item') + "`'"	
 				}
 				else {
           if ( data.meta.loreCount === 1) {
-            replyMsg = "1 item found for '" + interaction.options.getString('item') + "'\n"
+            titleMsg = "1 item found for '`" + interaction.options.getString('item') + "`'"
           }
-          else {
-            replyMsg = data.meta.loreCount + " items found for '" + interaction.options.getString('item') + "'\n"
+					else if (data.meta.loreCount > 40) {
+            titleMsg = data.meta.loreCount + " items found for '`" + interaction.options.getString('item') + "`'. Displaying first " 
+							+ Math.min(40, data.meta.loreCount) +  " items."
           }
+					else if (data.meta.loreCount <= 40) {
+					  titleMsg = data.meta.loreCount + " items found for '`" + interaction.options.getString('item') + "`'"
+					}
+					
+					// loop thru lores
 				  for (let i = 0; i < data.data.length; i++) {
-					  replyMsg += "Object '" + data.data[i].OBJECT_NAME + "'\n";
+						embedMsg += "`Object`[`" + data.data[i].OBJECT_NAME.toString().trim() + "`](http://www.normstorm.com)\n"
 		  	  }
+					console.log(embedMsg)
+           
+					embedObj.setTitle("" + titleMsg + "" )
+					embedObj.setDescription(embedMsg );
+       
 	      }
         dateTime = moment().format("YYYY-MM-DD HH:mm:ss");
         console.log(`${dateTime} : ${interaction.user.username.toString().padEnd(30)} /brief ${interaction.options.getString('item')}`)
-        interaction.reply({ content: "```" + replyMsg + "```" , ephemeral: true});
+				
+				interaction.reply({embeds: [embedObj], ephemeral: true})
 			})
 	},
 };
