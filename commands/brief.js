@@ -50,7 +50,8 @@ module.exports = {
 					
 					// loop thru lores
 				  for (let i = 0; i < data.data.length; i++) {
-						embedMsg += "`Object`[`" + data.data[i].OBJECT_NAME.toString().trim() + "`](http://www.normstorm.com)\n"
+						embedMsg += "`Object`[`" + data.data[i].OBJECT_NAME.toString().trim() 
+							                       + "`](http://127.0.0.1:8080/api/v1/query/" + data.data[i].LORE_ID + ")\n"
 		  	  }
 					//console.log(embedMsg)
            
