@@ -1,15 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
-/**
- * ephemeral messages: https://discordjs.guide/slash-commands/response-methods.html#ephemeral-responses
- * slash commands in bot DM: https://github.com/discord/discord-api-docs/issues/2365
- * 
- * 
- */
+var moment = require('moment');
 
-//##########################################################################
-//# Converts comma separated
-//##########################################################################
-var formatAffects = (pArg) => {
+
+/**
+ * Converts comma separated - for use with formatLore()
+ */
+function formatAffects(pArg) {
   let retvalue = "";
   let affectsArr = [];
   let sb = "";
@@ -82,6 +78,9 @@ function formatLore(pArg) {
 	return retvalue;
 }
 
+/**
+ * slashcommand handler for /stat
+ */
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('stat')
@@ -94,10 +93,10 @@ module.exports = {
 				.setRequired(true)),
 	
 	async execute(interaction) {
+    let dateTime = ''
 		let replyMsg =''
 		let loreURL = "http://127.0.0.1:8080/api/v1/stat/" + interaction.options.getString('item') + "/1"
-		// interaction.user is the object representing the User who ran the command
-		// interaction.member is the GuildMember object, which represents the user in the specific guild
+
 		await fetch(loreURL, {method: 'GET'}).then(
 			res => {
 				if (res.ok) {  // note: response object contains entire HTTP response including headers
@@ -107,9 +106,6 @@ module.exports = {
 				}
 			})
 			.then(data => {
-				//console.log(data.jsonData)//[0])
-				//formatLore(data)
-//				let replyMsg = ''
 				if (data.data.length === 0) {
 				  replyMsg = "0 item(s) found for '" + interaction.options.getString('item') + "'\n"	
 				}
@@ -124,20 +120,9 @@ module.exports = {
 					  replyMsg += formatLore(data.data[i]);
 		  	  }
 	      }
+        dateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+        console.log(`${dateTime} : ${interaction.user.username.toString().padEnd(30)} /stat ${interaction.options.getString('item')}`)
         interaction.reply({ content: "```" + replyMsg + "```" , ephemeral: true});
 			})
-
-	  //await interaction.reply({ content: "```" + replyMsg + "```" , ephemeral: true});
-	
-		//#console.log('loreURL: ' + loreURL)
-		/*await interaction.reply({ content: "`1 item found for '" + interaction.options.getString('item') + "'`"
-								, ephemeral: true
-							    });
-									*/
-		/*
-		await interaction.followUp({content: "```" + interaction.options.getString('item') + "```"
-								  , ephemeral: true
-								   });
-	  */
 	},
 };
