@@ -5,6 +5,19 @@ const { SlashCommandBuilder } = require('discord.js');
  * 
  * 
  */
+function formatLore(pArg) {
+  let sb ='';
+
+	if (pArg != null) {
+		if (pArg.data.length > 0) {
+			for (let i = 0; i < Math.min(pArg.data.length,3); i++) {
+				sb = ''
+			}
+		}
+	}
+	return sb;
+}
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('stat')
@@ -29,6 +42,7 @@ module.exports = {
 			})
 			.then(data => {
 				//console.log(data.jsonData)//[0])
+				formatLore(data)
 				for (let i = 0; i < 3; i++) {
 				console.log(data.data[i].OBJECT_NAME)	
 		  	}
